@@ -1,0 +1,41 @@
+WITH event_summary AS (
+    SELECT 
+        sd.customer_id,
+        MAX(CASE WHEN event_type = 'page_view'THEN 1 ELSE 0 END) AS page_view ,
+        MAX(CASE WHEN event_type = 'add_to_cart'THEN 1 ELSE 0 END) AS add_to_cart,
+        MAX(CASE WHEN event_type = 'checkout'THEN 1 ELSE 0 END) AS checkout ,
+        MAX(CASE WHEN event_type = 'purchase'THEN 1 ELSE 0 END) AS purchase 
+    
+    FROM 
+        events_fact AS ef
+
+    JOIN sessions_dim AS sd
+    ON ef.session_id = sd.session_id
+
+    GROUP BY
+        sd.customer_id
+),
+-- Number of users at each stage
+counts AS(
+    SELECT 
+            COUNT(*) FILTER (WHERE page_view = 1) AS view_count,
+            COUNT(*) FILTER (WHERE add_to_cart = 1) AS cart_count,
+            COUNT(*) FILTER (WHERE checkout = 1) AS checkout_count,
+            COUNT(*) FILTER (WHERE purchase = 1) AS purchase_count
+        
+    FROM 
+        event_summary    
+)
+-- Conversion Rates
+SELECT
+    view_count,
+    cart_count, 
+    checkout_count,
+    purchase_count,
+
+    cart_count * 1.0 / view_count AS view_to_cart,
+    checkout_count * 1.0 / cart_count AS cart_to_checkout,
+    purchase_count * 1.0 /checkout_count AS checkout_to_purchase
+FROM
+    counts
+

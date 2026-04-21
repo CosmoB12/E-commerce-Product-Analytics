@@ -94,3 +94,4 @@ INSERT INTO reviews_fact(
     FROM
         reviews_raw
 )
+
