@@ -24,7 +24,7 @@ The analysis is based on event-level data (sessions, interactions, purchases, an
 
 ## 📸 Dashboard
 
-![Dashboard](assests\product_analysis_dashboard.png)
+![Dashboard](assests/product_analysis_dashboard.png)
 
 > *Power BI dashboard showing funnel performance, user behaviour, and retention trends*
 
@@ -40,9 +40,9 @@ The analysis is based on event-level data (sessions, interactions, purchases, an
 - Largest loss point in the funnel
 
 📊 *Funnel Visualization*  
-![Funnel](assests\funnel.png)
+![Funnel](assests/funnel.png)
 
-📂 Query: [Where do users drop off in the funnel](analyses\02_Conversion_Efficiency\02_where_do_users_drop_off_in_the_funnel.sql.sql)
+📂 Query: [Where do users drop off in the funnel](analyses/02_Conversion_Efficiency/02_where_do_users_drop_off_in_the_funnel.sql.sql)
 
 **Insight:**  
 Users struggle at the **decision stage**, not checkout—indicating unclear value proposition or insufficient product confidence early on.
@@ -54,7 +54,7 @@ Users struggle at the **decision stage**, not checkout—indicating unclear valu
 - Cart abandonment rate: ~17%
 - Users who add to cart are highly likely to purchase
 
-📂 Query: [Where do users drop off in the funnel](analyses\02_Conversion_Efficiency\02_where_do_users_drop_off_in_the_funnel.sql)
+📂 Query: [Where do users drop off in the funnel](analyses/02_Conversion_Efficiency/02_where_do_users_drop_off_in_the_funnel.sql)
 
 **Insight:**  
 The checkout experience is efficient. Late-stage friction is minimal.
@@ -67,12 +67,12 @@ The checkout experience is efficient. Late-stage friction is minimal.
 - Only ~34% convert in a single session
 
 📊 *Engagement per User*  
-![Engagement](assests\engagement.png)
+![Engagement](assests/engagement.png)
 
 📊 *Sessions Before Purchase*  
-![Sessions Before Purchase](assests\sessions_to_purchase.png)
+![Sessions Before Purchase](assests/sessions_to_purchase.png)
 
-📂 Query: [How many sessions do users need before first purchase](analyses\04_Retention_&_Behavior\07_how_many_sessions_do_users_need_before_first_purchase.sql)
+📂 Query: [How many sessions do users need before first purchase](analyses/04_Retention_&_Behavior/07_how_many_sessions_do_users_need_before_first_purchase.sql)
 
 **Insight:**  
 Users are engaged but take time to evaluate before committing—suggesting hesitation and decision friction.
@@ -84,7 +84,7 @@ Users are engaged but take time to evaluate before committing—suggesting hesit
 - ~66% of users require multiple sessions to convert  
 - Many require 4+ sessions  
 
-📂 Query: [How many sessions do users need before first purchase](analyses\04_Retention_&_Behavior\07_how_many_sessions_do_users_need_before_first_purchase.sql)
+📂 Query: [How many sessions do users need before first purchase](analyses/04_Retention_&_Behavior/07_how_many_sessions_do_users_need_before_first_purchase.sql)
 
 **Insight:**  
 Purchases are not impulsive. Users likely compare options or need repeated exposure before converting.
@@ -120,7 +120,7 @@ Users are satisfied but return infrequently—suggesting need-based usage rather
   - Device types  
 
 📊 *Churn by Source*  
-![Churn by Source](assests\churn_by_source.png)
+![Churn by Source](assests/churn_by_source.png)
 
 📂 Query: `analyses/09_which_channels_have_the_highest_churn.sql`
 
