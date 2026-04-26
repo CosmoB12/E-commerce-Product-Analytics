@@ -75,3 +75,5 @@ CREATE TABLE reviews_fact(
     FOREIGN KEY (order_id) REFERENCES orders_fact(order_id),
     FOREIGN KEY (product_id) REFERENCES products_dim(product_id)
 )
+
+SELECT* FROM sessions_dim
