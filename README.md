@@ -4,7 +4,7 @@
 
 ## 🧠 Overview
 
-This project explores user behavior across the full product lifecycle—from initial interaction to repeat purchase—to uncover friction points, understand engagement patterns, and identify opportunities to improve conversion and retention.
+This project explores user behavior across the full product lifecycle from initial interaction to repeat purchase to uncover friction points, understand engagement patterns, and identify opportunities to improve conversion and retention.
 
 The analysis is based on event-level data (sessions, interactions, purchases, and reviews) and is designed to support decision-making across **Product, Marketing, and Growth teams**.
 
