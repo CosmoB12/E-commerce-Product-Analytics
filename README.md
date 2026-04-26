@@ -24,7 +24,7 @@ The analysis is based on event-level data (sessions, interactions, purchases, an
 
 ## 📸 Dashboard
 
-![Dashboard](./assets/dashboard.png)
+![Dashboard](assests\product_analysis_dashboard.png)
 
 > *Power BI dashboard showing funnel performance, user behaviour, and retention trends*
 
@@ -40,9 +40,9 @@ The analysis is based on event-level data (sessions, interactions, purchases, an
 - Largest loss point in the funnel
 
 📊 *Funnel Visualization*  
-![Funnel](assets/funnel.png)
+![Funnel](assests\funnel.png)
 
-📂 Query: `analyses/02_where_do_users_drop_off_before_purchase.sql`
+📂 Query: [Where do users drop off in the funnel](analyses\02_Conversion_Efficiency\02_where_do_users_drop_off_in_the_funnel.sql.sql)
 
 **Insight:**  
 Users struggle at the **decision stage**, not checkout—indicating unclear value proposition or insufficient product confidence early on.
@@ -54,7 +54,7 @@ Users struggle at the **decision stage**, not checkout—indicating unclear valu
 - Cart abandonment rate: ~17%
 - Users who add to cart are highly likely to purchase
 
-📂 Query: `analyses/02_where_do_users_drop_off_before_purchase.sql`
+📂 Query: [Where do users drop off in the funnel](analyses\02_Conversion_Efficiency\02_where_do_users_drop_off_in_the_funnel.sql)
 
 **Insight:**  
 The checkout experience is efficient. Late-stage friction is minimal.
@@ -67,12 +67,12 @@ The checkout experience is efficient. Late-stage friction is minimal.
 - Only ~34% convert in a single session
 
 📊 *Engagement per User*  
-![Engagement](assets/engagement.png)
+![Engagement](assests\engagement.png)
 
 📊 *Sessions Before Purchase*  
-![Sessions Before Purchase](assets/sessions_to_purchase.png)
+![Sessions Before Purchase](assests\sessions_to_purchase.png)
 
-📂 Query: `analyses/05_how_many_sessions_do_users_need_before_first_purchase.sql`
+📂 Query: [How many sessions do users need before first purchase](analyses\04_Retention_&_Behavior\07_how_many_sessions_do_users_need_before_first_purchase.sql)
 
 **Insight:**  
 Users are engaged but take time to evaluate before committing—suggesting hesitation and decision friction.
@@ -84,7 +84,7 @@ Users are engaged but take time to evaluate before committing—suggesting hesit
 - ~66% of users require multiple sessions to convert  
 - Many require 4+ sessions  
 
-📂 Query: `analyses/05_how_many_sessions_do_users_need_before_first_purchase.sql`
+📂 Query: [How many sessions do users need before first purchase](analyses\04_Retention_&_Behavior\07_how_many_sessions_do_users_need_before_first_purchase.sql)
 
 **Insight:**  
 Purchases are not impulsive. Users likely compare options or need repeated exposure before converting.
@@ -120,7 +120,7 @@ Users are satisfied but return infrequently—suggesting need-based usage rather
   - Device types  
 
 📊 *Churn by Source*  
-![Churn by Source](assets/churn_by_source.png)
+![Churn by Source](assests\churn_by_source.png)
 
 📂 Query: `analyses/09_which_channels_have_the_highest_churn.sql`
 
@@ -187,3 +187,54 @@ JOIN sessions_dim sd
     ON ef.session_id = sd.session_id
 WHERE event_type IN ('add_to_cart','checkout','purchase')
 GROUP BY ef.event_type;
+
+
+
+### 🔹 Funnel Conversion Analysis
+
+WITH user_event AS(
+    SELECT
+        sd.customer_id,
+        MAX(CASE WHEN ef.event_type = 'add_to_cart' THEN 1 ELSE 0 END) AS added_to_cart,
+        MAX(CASE WHEN ef.event_type = 'purchase' THEN 1 ELSE 0 END) AS purchased
+    FROM events_fact ef
+    JOIN sessions_dim sd
+        ON ef.session_id = sd.session_id
+    GROUP BY sd.customer_id
+)
+
+SELECT
+    COUNT(*) FILTER(WHERE added_to_cart = 1 AND purchased = 0) AS abandoned_users,
+    COUNT(*) FILTER(WHERE added_to_cart = 1 AND purchased = 1) AS converted_users
+FROM user_event;
+🔹 Sessions to Purchase
+WITH first_purchase AS (
+    SELECT
+        sd.customer_id,
+        MIN(ef.time_stamp) AS first_purchase
+    FROM events_fact ef
+    JOIN sessions_dim sd
+        ON ef.session_id = sd.session_id
+    WHERE ef.event_type = 'purchase'
+    GROUP BY sd.customer_id
+),
+sessions_to_purchase AS (
+    SELECT
+        fp.customer_id,
+        COUNT(DISTINCT sd.session_id) AS sessions_to_purchase
+    FROM first_purchase fp
+    LEFT JOIN sessions_dim sd
+        ON fp.customer_id = sd.customer_id
+       AND sd.start_time < fp.first_purchase
+    GROUP BY fp.customer_id
+)
+SELECT
+    CASE
+        WHEN sessions_to_purchase = 1 THEN '1 session'
+        WHEN sessions_to_purchase BETWEEN 2 AND 3 THEN '2-3 sessions'
+        WHEN sessions_to_purchase BETWEEN 4 AND 6 THEN '4-6 sessions'
+        ELSE '7+ sessions'
+    END AS session_segment,
+    COUNT(*) AS users
+FROM sessions_to_purchase
+GROUP BY session_segment;
