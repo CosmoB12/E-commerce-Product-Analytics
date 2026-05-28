@@ -15,7 +15,7 @@ Using event-level data spanning user sessions, product interactions, purchases, 
 - **Retention & Repeat Purchase** — are we building habitual users or one-time buyers?
 - **Churn Analysis** — is this a product problem, a channel problem, or something else?
 
-The outputs are intended to support decision-making across Product, Marketing, and Growth teams — giving each function a shared understanding of where the real leverage points are.
+The outputs are intended to support decision-making across Product, Marketing, and Growth teams, giving each function a shared understanding of where the real leverage points are.
 
 Insights and recommendations are provided on the following key areas:
 
@@ -38,22 +38,23 @@ The database structure consists of two core tables, one dimension table, and one
 
 ![ERD](assests/erd.png)
 
-**`event_fact`** — the central fact table. Stores every user interaction with fields including `event_type`, `event_date`, `event_id`, `product_id`, `amount_usd`, `cart_size`, `discount_pct`, `quantity`, and `payment_method`. This is the primary source for funnel, conversion, and revenue analysis.
+- **`event_fact`** — the central fact table. Stores every user interaction with fields including `event_type`, `event_date`, `event_id`, `product_id`, `amount_usd`, `cart_size`, `discount_pct`, `quantity`, and `payment_method`. This is the primary source for funnel, conversion, and revenue analysis.
 
-**`sessions_dim`** — the session dimension table. Links events to users via `session_id` and `customer_id`, and captures `device`, `source` (acquisition channel), `country`, and `start_time`. Used to attribute behavior back to individual users and track engagement across visits.
+- **`sessions_dim`** — the session dimension table. Links events to users via `session_id` and `customer_id`, and captures `device`, `source` (acquisition channel), `country`, and `start_time`. Used to attribute behavior back to individual users and track engagement across visits.
 
-**`customers`** — one row per user. Contains `customer_id`, `age`, `country`, `email`, and `marketing_opt_in`. Connects to `sessions_dim` via `customer_id` and is used for demographic segmentation and churn analysis.
+- **`customers`** — one row per user. Contains `customer_id`, `age`, `country`, `email`, and `marketing_opt_in`. Connects to `sessions_dim` via `customer_id` and is used for demographic segmentation and churn analysis.
 
-**`date_dim`** — standard date dimension supporting time-based analysis. Contains `Date`, `Day`, `Day Name`, `Is Weekend`, and `Month` fields. Joins to `event_fact` on `event_date` and is used for cohort and trend analysis.
+- **`date_dim`** — standard date dimension supporting time-based analysis. Contains `Date`, `Day`, `Day Name`, `Is Weekend`, and `Month` fields. Joins to `event_fact` on `event_date` and is used for cohort and trend analysis.
 
 ---
 
 ## Executive Summary
 
 ![Dashboard](assests/product_analysis_dashboard.png)
+
 *Power BI dashboard showing funnel performance, user behaviour, and retention trends*
 
-The core finding of this analysis is this: **we do not have a checkout problem — we have a consideration problem.** Roughly 73% of users who view a product page never add anything to their cart, while users who do reach the cart convert at a strong rate with only ~17% abandonment. Beyond conversion, the data reveals a product with genuinely satisfied users (majority 4–5 star reviews) who simply do not feel urgency to act quickly or return frequently — and churn, defined as 90+ days of inactivity, is consistent across all acquisition channels and device types, pointing to the product experience rather than marketing as the root cause of disengagement.
+The core finding of this analysis is this: **we do not have a checkout problem, we have a consideration problem.** Roughly 73% of users who view a product page never add anything to their cart, while users who do reach the cart convert at a strong rate with only ~17% abandonment. Beyond conversion, the data reveals a product with genuinely satisfied users (majority 4–5 star reviews) who simply do not feel urgency to act quickly or return frequently and churn, defined as 90+ days of inactivity, is consistent across all acquisition channels and device types, pointing to the product experience rather than marketing as the root cause of disengagement.
 
 ---
 
@@ -65,30 +66,30 @@ The core finding of this analysis is this: **we do not have a checkout problem �
 
 ![Funnel Drop-Off](assests/funnel.png)
 
-**Once users add to cart, they almost always buy.** Cart abandonment sits at ~17%, which is a healthy rate. The checkout experience is working — users who express purchase intent follow through. This means checkout optimization is a low-priority investment compared to the top-of-funnel problem.
+- **Once users add to cart, they almost always buy.** Cart abandonment sits at ~17%, which is a healthy rate. The checkout experience is working, users who express purchase intent follow through. This means checkout optimization is a low-priority investment compared to the top-of-funnel problem.
 
-**The decision stage, not the transaction stage, is where confidence breaks down.** Users are likely arriving, browsing, and leaving without feeling confident enough to act. This points to unclear value proposition or insufficient social proof on product pages rather than any friction in the purchase flow itself.
+- **The decision stage, not the transaction stage, is where confidence breaks down.** Users are likely arriving, browsing, and leaving without feeling confident enough to act. This points to unclear value proposition or insufficient social proof on product pages rather than any friction in the purchase flow itself.
 
 ---
 
 ### Engagement Behavior
 
-**Users are genuinely active in-session, but slow to commit.** Users perform multiple interactions per session, yet only ~34% convert in a single visit. High in-session engagement exists — but it is not translating to immediate purchase decisions.
+**Users are genuinely active in-session, but slow to commit.** Users perform multiple interactions per session, yet only ~34% convert in a single visit. High in-session engagement exists, but it is not translating to immediate purchase decisions.
 
 ![Engagement per User](assests/engagement.png)
 ![Sessions Before Purchase](assests/sessions_to_purchase.png)
 
-**Most users require multiple sessions before converting.** ~66% of converting users return for more than one session before making a purchase, with many needing 4 or more visits. Purchases are considered, not impulsive — users are likely comparison shopping or waiting for a trigger to act.
+- **Most users require multiple sessions before converting.** ~66% of converting users return for more than one session before making a purchase, with many needing 4 or more visits. Purchases are considered, not impulsive, users are likely comparison shopping or waiting for a trigger to act.
 
-**Engagement is the strongest leading indicator of conversion.** Users who interact deeply with the product are pre-qualified buyers. There is a strong correlation between in-session engagement depth and likelihood to eventually purchase, making engagement a key metric to monitor and optimize for.
+- **Engagement is the strongest leading indicator of conversion.** Users who interact deeply with the product are pre-qualified buyers. There is a strong correlation between in-session engagement depth and likelihood to eventually purchase, making engagement a key metric to monitor and optimize for.
 
 ---
 
 ### Retention & Repeat Purchase
 
-**Repeat purchase behavior exists — but it is slow and need-driven.** The majority of users do return for a second purchase, which signals product satisfaction. However, the median time to second purchase is ~45 days, suggesting usage is occasion-based rather than habitual.
+- **Repeat purchase behavior exists — but it is slow and need-driven.** The majority of users do return for a second purchase, which signals product satisfaction. However, the median time to second purchase is ~45 days, suggesting usage is occasion-based rather than habitual.
 
-**Users return when they need something, not because the product keeps them coming back.** There is no evidence of habit loops or regular engagement driving return visits. The product has earned loyalty but has not yet earned a regular place in users' routines, which caps the frequency ceiling on repeat revenue.
+- **Users return when they need something, not because the product keeps them coming back.** There is no evidence of habit loops or regular engagement driving return visits. The product has earned loyalty but has not yet earned a regular place in users' routines, which caps the frequency ceiling on repeat revenue.
 
 ---
 
@@ -98,9 +99,9 @@ The core finding of this analysis is this: **we do not have a checkout problem �
 
 ![Churn by Source](assests/churn_by_source.png)
 
-**Churn reflects inactivity, not dissatisfaction.** Churn is defined as 90+ days of inactivity — it does not necessarily reflect a negative experience. Combined with the positive review data (majority 4–5 stars), this suggests users are not leaving because the product failed them; they are drifting away because nothing pulled them back.
+- **Churn reflects inactivity, not dissatisfaction.** Churn is defined as 90+ days of inactivity — it does not necessarily reflect a negative experience. Combined with the positive review data (majority 4–5 stars), this suggests users are not leaving because the product failed them; they are drifting away because nothing pulled them back.
 
-**Re-engagement, not acquisition, is the retention lever.** Since churn is channel-agnostic and the product quality signal is strong, investing more in acquisition will not solve the retention problem. The opportunity lies in building touchpoints that bring satisfied-but-quiet users back before they hit the 90-day mark.
+- **Re-engagement, not acquisition, is the retention lever.** Since churn is channel-agnostic and the product quality signal is strong, investing more in acquisition will not solve the retention problem. The opportunity lies in building touchpoints that bring satisfied-but-quiet users back before they hit the 90-day mark.
 
 ---
 
@@ -108,15 +109,15 @@ The core finding of this analysis is this: **we do not have a checkout problem �
 
 Based on the insights and findings above, we would recommend the Product and Growth teams to consider the following:
 
-**73% of users drop off before adding to cart — fix the consideration stage first.** The product page is not converting interest into intent. Audit pages for clarity of value proposition, add trust signals (reviews, return policy, social proof), and A/B test layouts that surface persuasive information earlier. This is the single highest-ROI intervention available.
+- **73% of users drop off before adding to cart — fix the consideration stage first.** The product page is not converting interest into intent. Audit pages for clarity of value proposition, add trust signals (reviews, return policy, social proof), and A/B test layouts that surface persuasive information earlier. This is the single highest-ROI intervention available.
 
-**66% of users need multiple sessions to convert — build a session-continuity strategy.** Implement behaviorally triggered email or push reminders ("still thinking about X?") and introduce low-friction features like wishlists or saved items to keep users connected to their intent between visits. Retargeting should be specific and recency-focused, not generic.
+- **66% of users need multiple sessions to convert — build a session-continuity strategy.** Implement behaviorally triggered email or push reminders ("still thinking about X?") and introduce low-friction features like wishlists or saved items to keep users connected to their intent between visits. Retargeting should be specific and recency-focused, not generic.
 
-**The median second purchase takes ~45 days — create reasons to return sooner.** Post-purchase sequences (care guides, complementary products, curated recommendations) and loyalty mechanics can compress the return window and shift users from need-based to habitual buyers without relying on discounts.
+- **The median second purchase takes ~45 days — create reasons to return sooner.** Post-purchase sequences (care guides, complementary products, curated recommendations) and loyalty mechanics can compress the return window and shift users from need-based to habitual buyers without relying on discounts.
 
-**Churn is consistent across all channels — stop treating it as an acquisition problem.** Build a 30/60/90-day re-engagement flow for users going quiet. Segment inactive users and test win-back approaches: value-led, curiosity-led, and social proof-led. Monitor time-to-second-session as an early churn warning signal.
+- **Churn is consistent across all channels — stop treating it as an acquisition problem.** Build a 30/60/90-day re-engagement flow for users going quiet. Segment inactive users and test win-back approaches: value-led, curiosity-led, and social proof-led. Monitor time-to-second-session as an early churn warning signal.
 
-**The checkout flow is working — protect it, don't over-optimize it.** Cart abandonment at ~17% is healthy. Resist the temptation to invest heavily in checkout improvements when the real volume loss is happening at the top of the funnel.
+- **The checkout flow is working — protect it, don't over-optimize it.** Cart abandonment at ~17% is healthy. Resist the temptation to invest heavily in checkout improvements when the real volume loss is happening at the top of the funnel.
 
 ---
 
