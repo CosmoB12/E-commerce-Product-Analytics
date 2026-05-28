@@ -34,23 +34,17 @@ An interactive Power BI dashboard used to report and explore user behaviour tren
 
 ## Data Structure Overview
 
-The company's database was built from seven source CSV files loaded via the `sql_load/` pipeline. The data covers the full customer lifecycle — from account creation through browsing, purchasing, and reviewing. The core tables used in this analysis are as follows:
+The database structure consists of two core tables, one dimension table, and one customer table, with a total of four tables. The entity relationship diagram is shown below.
 
-**`customers`** — one row per user. Contains demographic and acquisition data including the channel through which the user was acquired and the device type they use. Used for churn segmentation and channel analysis.
+![ERD](assests/erd.png)
 
-**`events`** — the atomic activity table. Every user action is logged here: `page_view`, `add_to_cart`, `checkout`, and `purchase`. This is the primary source for funnel and conversion analysis.
+**`event_fact`** — the central fact table. Stores every user interaction with fields including `event_type`, `event_date`, `event_id`, `product_id`, `amount_usd`, `cart_size`, `discount_pct`, `quantity`, and `payment_method`. This is the primary source for funnel, conversion, and revenue analysis.
 
-**`sessions`** — links events to users via `session_id` and `customer_id`, enabling us to count how many sessions a user has before converting and measure engagement depth per visit.
+**`sessions_dim`** — the session dimension table. Links events to users via `session_id` and `customer_id`, and captures `device`, `source` (acquisition channel), `country`, and `start_time`. Used to attribute behavior back to individual users and track engagement across visits.
 
-**`orders`** — one row per completed transaction. Used for purchase timing analysis, including time between first and second purchase.
+**`customers`** — one row per user. Contains `customer_id`, `age`, `country`, `email`, and `marketing_opt_in`. Connects to `sessions_dim` via `customer_id` and is used for demographic segmentation and churn analysis.
 
-**`order_items`** — line-item detail for each order. Supports product-level analysis and repeat purchase patterns.
-
-**`products`** — product catalogue. Used to join product context to event and order data.
-
-**`reviews`** — customer-submitted ratings and feedback. Used to assess product satisfaction and cross-reference against churn behavior.
-
-Together, these tables allow us to answer both volume questions ("how many users dropped off?") and behavioral questions ("what did users do before they converted?").
+**`date_dim`** — standard date dimension supporting time-based analysis. Contains `Date`, `Day`, `Day Name`, `Is Weekend`, and `Month` fields. Joins to `event_fact` on `event_date` and is used for cohort and trend analysis.
 
 ---
 
